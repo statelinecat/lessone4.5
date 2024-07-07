@@ -33,6 +33,7 @@ mouse_width, mouse_height = mouse_img.get_size()
 cat_x = screen_width // 2
 cat_y = screen_height // 2
 cat_speed = 1
+mouse_speed = 0.6
 
 # Переменные игры
 game_time = 0
@@ -91,6 +92,12 @@ while running:
         if keys[pygame.K_DOWN]:
             cat_y += cat_speed
 
+        mouse_x += random.randint(-1, 1) * mouse_speed
+        mouse_y += random.randint(-1, 1) * mouse_speed
+
+        mouse_x = max(0, min(mouse_x, screen_width - mouse_width))
+        mouse_y = max(0, min(mouse_y, screen_height - mouse_height))
+
             # Ограничение движения кота по границам экрана
         cat_x = max(0, min(cat_x, screen_width - cat_width))
         cat_y = max(0, min(cat_y, screen_height - cat_height))
@@ -105,10 +112,13 @@ while running:
         screen.blit(cat_img, (cat_x, cat_y))
         screen.blit(mouse_img, (mouse_x, mouse_y))
 
-        # Отображение оставшегося времени
+        # Отображение оставшегося времени и пойманных мышей
         time_left = max(0, int(game_time - elapsed_time))
         time_text = font.render(f'Время: {time_left} сек', True, white)
         screen.blit(time_text, (10, 10))
+
+        mouse_text = font.render(f'Поймано мышей: {caught_mice} ', True, white)
+        screen.blit(mouse_text, (500, 10))
 
     elif not game_active and not input_active:
         result_text = font.render(f'Игра окончена! Вы поймали {caught_mice} мышей.', True, white)
